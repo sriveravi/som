@@ -401,8 +401,6 @@ class SOM:
 	column_text = gtk.TreeViewColumn('NLT', renderer_text, text=d+2)
 	treeview.append_column(column_text)
 
-
-
 	return treeview
 
     def update_treeview(self, data, liststore):
@@ -428,6 +426,22 @@ class SOM:
       #self.init_som()
       self.update_treeview(self.test_data, self.test_liststore)
       self.update_treeview(self.data, self.patterns_liststore)
+
+
+
+    def pertSomWeigts( self,  widget=None, data=None ):
+        #if scale == None:
+        scale = .1
+        print( 'entered pert som weight function')
+        # print( self.som.weights )
+        # print( self.som.weights.shape )
+	pertAmount = scale*(np.random.random_sample( self.som.weights.shape)-.5)
+        self.som.weights = self.som.weights + pertAmount
+#	print self.som.weights
+
+        self.update_treeview(self.test_data, self.test_liststore)
+        self.update_treeview(self.data, self.patterns_liststore)
+
 
 
     def __init__(self):
@@ -514,6 +528,12 @@ class SOM:
       self.height_spin_button.connect("value-changed", self.Reset, "Height changed")
       self.width_spin_button.connect("value-changed", self.Reset, "Width changed")
 
+      # add perturb button to disturb trained som weights
+      self.perturb = gtk.Button("Perturb SOM") # create gtk button to perturb som weights
+      self.perturb.connect( "clicked", self.pertSomWeigts, None ) # run self.pertSomWeigts
+      self.perturb.show() # tell GTK to show button, but not where
+       
+
 
       #self.width_spin_button.connect("value_changed", self.init_som)
       #self.height_spin_button.connect("value_changed", self.init_som)
@@ -561,10 +581,6 @@ class SOM:
       #self.data = np.genfromtxt(self.file_name, delimiter=',',usecols=(0,1,2,3,4,5,6,7),skip_header=1)
       #self.pattern_labels = np.genfromtxt(self.file_name, delimiter=',',usecols=(0,1,2,3,4,5,6,7), skip_footer=8, dtype=str)
       ##self.data = np.apply_along_axis(lambda x: x/np.linalg.norm(x),1,self.data) # data normalization
-
-
-
-
 
 
 
@@ -635,8 +651,7 @@ class SOM:
 
       self.hbox.pack_start(self.width_spin_button, expand, fill, padding)
       self.hbox.pack_start(self.height_spin_button, expand, fill, 0)
-
-
+      self.hbox.pack_start( self.perturb, expand, fill, padding)
 
 
 
