@@ -429,7 +429,7 @@ class SOM:
 
 
 
-    def pertSomWeigts( self,  widget=None, data=None ):
+    def pertSomWeights( self,  widget=None, data=None ):
         #if scale == None:
         scale = .1
         print( 'entered pert som weight function')
@@ -438,9 +438,13 @@ class SOM:
 	pertAmount = scale*(np.random.random_sample( self.som.weights.shape)-.5)
         self.som.weights = self.som.weights + pertAmount
 #	print self.som.weights
+	self.Draw_figure()
+	self.canvas.draw()
+	self.canvas.draw_idle()
+	#We need to draw *and* flush
+	self.figure.canvas.draw()
+	self.figure.canvas.flush_events()
 
-        self.update_treeview(self.test_data, self.test_liststore)
-        self.update_treeview(self.data, self.patterns_liststore)
 
 
 
@@ -530,7 +534,7 @@ class SOM:
 
       # add perturb button to disturb trained som weights
       self.perturb = gtk.Button("Perturb SOM") # create gtk button to perturb som weights
-      self.perturb.connect( "clicked", self.pertSomWeigts, None ) # run self.pertSomWeigts
+      self.perturb.connect( "clicked", self.pertSomWeights, None ) # run self.pertSomWeights
       self.perturb.show() # tell GTK to show button, but not where
        
 
