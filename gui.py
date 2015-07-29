@@ -428,11 +428,13 @@ class SOM:
       self.update_treeview(self.data, self.patterns_liststore)
 
 
+#----------------------------------------
+# SAM added these functions here
 
     def pertSomWeights( self,  widget=None, data=None ):
         #if scale == None:
-        scale = .1
-        print( 'entered pert som weight function')
+        scale = .5
+        print( 'Adding noise to SOM weights')
         # print( self.som.weights )
         # print( self.som.weights.shape )
 	pertAmount = scale*(np.random.random_sample( self.som.weights.shape)-.5)
@@ -446,8 +448,29 @@ class SOM:
 	self.figure.canvas.flush_events()
 
 
+    def pertInputs( self,  widget=None, data=None ):
+        #if scale == None:
+        p = .2
+        print( 'Making %f prop of inputs 0.5' %p)
+        #print( self.data.shape )
+	
+        # randomly get indices to switch, then replace
+	noiseIndex = np.random.binomial(1,p, self.data.shape)  #ones at p proportion of samples
+	self.data[noiseIndex ==1 ] = .5
+	print( self.data )
+
+	self.Draw_figure()
+	self.canvas.draw()
+	self.canvas.draw_idle()
+	#We need to draw *and* flush
+	self.figure.canvas.draw()
+	self.figure.canvas.flush_events()
+
+#        self.update_treeview(self.test_data, self.test_liststore)
+#        self.update_treeview(self.data, self.patterns_liststore)
 
 
+#----------------------------------------
     def __init__(self):
       # create a new window
       self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -537,6 +560,11 @@ class SOM:
       self.perturb.connect( "clicked", self.pertSomWeights, None ) # run self.pertSomWeights
       self.perturb.show() # tell GTK to show button, but not where
        
+      # add button to add noisy encoding to training inputs
+      self.perturbInputButton = gtk.Button("Perturb Inputs") # create gtk button to perturb som weights
+      self.perturbInputButton.connect( "clicked", self.pertInputs, None ) # run self.pertSomWeights
+      self.perturbInputButton.show() # tell GTK to show button, but not where
+	
 
 
       #self.width_spin_button.connect("value_changed", self.init_som)
@@ -656,7 +684,9 @@ class SOM:
       self.hbox.pack_start(self.width_spin_button, expand, fill, padding)
       self.hbox.pack_start(self.height_spin_button, expand, fill, 0)
       self.hbox.pack_start( self.perturb, expand, fill, padding)
+      self.hbox.pack_start( self.perturbInputButton, expand, fill, padding)
 
+	
 
 
       #self.quit = gtk.Button("Quit")
