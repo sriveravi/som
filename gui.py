@@ -458,7 +458,7 @@ class SOM:
 	noiseIndex = np.random.binomial(1,p, self.data.shape)  #ones at p proportion of samples
 	self.data[noiseIndex ==1 ] = .5
 	print( self.data )
-	# update the threeview for the patterns tab to see the result graphically 
+	# update the treeview for the "Patterns" tab to see the result graphically 
 	self.update_treeview(self.data, self.patterns_liststore)
 
 
