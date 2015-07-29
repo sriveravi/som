@@ -458,16 +458,8 @@ class SOM:
 	noiseIndex = np.random.binomial(1,p, self.data.shape)  #ones at p proportion of samples
 	self.data[noiseIndex ==1 ] = .5
 	print( self.data )
-
-	self.Draw_figure()
-	self.canvas.draw()
-	self.canvas.draw_idle()
-	#We need to draw *and* flush
-	self.figure.canvas.draw()
-	self.figure.canvas.flush_events()
-
-#        self.update_treeview(self.test_data, self.test_liststore)
-#        self.update_treeview(self.data, self.patterns_liststore)
+	# update the threeview for the patterns tab to see the result graphically 
+	self.update_treeview(self.data, self.patterns_liststore)
 
 
 #----------------------------------------
