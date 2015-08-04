@@ -353,17 +353,16 @@ class SOM:
 
       #print len(cols)
       self.som = MiniSom(self.width_spin_button.get_value_as_int(), self.height_spin_button.get_value_as_int(), len(cols),sigma=1.2,learning_rate=0.5)
-      self.som.weights_init_gliozzi(data)
-#       self.som.random_weights_init(data)
+#      self.som.weights_init_gliozzi(data)
+      self.som.random_weights_init(data)
 
     def train_som(self):
       cols = self.columns[self.combobox.get_active()]
       data = self.data[:, 0:len(cols)]
       print("Training...")
-      self.som.train_gliozzi(data) # Gliozzi et al training
+      #self.som.train_gliozzi(data) # Gliozzi et al training
 
-
-#       self.som.train_random(data,300)
+      self.som.train_random(data,300)
 
 
       print("\n...ready!")
