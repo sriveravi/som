@@ -308,11 +308,14 @@ class SOM:
         #print "destroy signal occurred"
         gtk.main_quit()
 
+    # T
     def Draw_figure(self):
-  	self.axes.cla()   # Clear axis
+	# this function draws the exemplars on the best matching units
+
+	self.axes.cla()   # Clear axis
 	cols = self.columns[self.combobox.get_active()]
 	data = self.data[:, 0:len(cols)]
-
+	test_data = self.test_data[:, 0:len(cols)]
 
 	#ion()       # Turn on interactive mode.
 	#hold(True) # Clear the plot before adding new data.
@@ -327,17 +330,31 @@ class SOM:
 	t = np.zeros(len(self.target),dtype=int)
 	t[self.target == 'A'] = 0
 	t[self.target == 'B'] = 1
-	t[self.target == 'C'] = 2
-	t[self.target == 'D'] = 3
+	#t[self.target == 'C'] = 2
+	#t[self.target == 'D'] = 3
+
+	tTest = np.zeros(len(self.test_target),dtype=int)
+	tTest[self.test_target == 'A'] = 2 #0
+	tTest[self.test_target == 'B'] = 3 #1
+
 
 	# use different colors and markers for each label
-	markers = ['o','s','D', '+']
+	markers = ['o','s','*', '+']
 	colors = ['r','g','b', 'y']
-	for cnt,xx in enumerate(data):
+	for cnt,xx in enumerate(data):  # training data ( noisy simulation)
 	  w = self.som.winner(xx) # getting the winner
 	  # place a marker on the winning position for the sample xx
 	  tmp = self.axes.plot(w[0]+.5,w[1]+.5,markers[t[cnt]],markerfacecolor='None',
 	      markeredgecolor=colors[t[cnt]],markersize=12,markeredgewidth=2)
+
+	# plot the test data (ideal input)
+	for cnt,xx in enumerate(test_data): # test data ( ideal )
+	  w = self.som.winner(xx) # getting the winner
+	  # place a marker on the winning position for the sample xx
+	  tmp = self.axes.plot(w[0]+.5,w[1]+.5,markers[tTest[cnt]],markerfacecolor='None',
+	      markeredgecolor=colors[tTest[cnt]],markersize=12,markeredgewidth=2)
+
+
 	self.axes.axis([0,self.som.weights.shape[0],0,self.som.weights.shape[1]])
 	#show() # show the figure
 	#print "drawing"
@@ -362,7 +379,7 @@ class SOM:
       print("Training...")
       #self.som.train_gliozzi(data) # Gliozzi et al training
 
-      self.som.train_random(data,300)
+      self.som.train_random(data,100)
 
 
       print("\n...ready!")
@@ -389,7 +406,7 @@ class SOM:
 
 	treeview = gtk.TreeView(model=liststore)
 	#i = 0
-	for d in range(len(self.test_data[0])):
+	for d in range(len(self.test_data[0])):  # not sure what this is doing
 	  #print i
 	  #i += 1
 	  renderer_text = gtk.CellRendererText()
@@ -566,12 +583,13 @@ class SOM:
       #self.pause.set_sensitive(self.som.paused)
       #self.vbox.pack_start(self.som, True, True, 0)
       file_names = ['stimuli.csv']
-      self.visual_only = [1,2,3,4,5,6,7,8]
+      self.visual_only = [0,1,2,3,4,5,6,7]
       self.visual_and_acoustic = [0,1,2,3,4,5,6,7,8]
       self.columns = [self.visual_only, self.visual_and_acoustic]
 
-      self.file_name = file_names[0]
-      self.test_file_name = 'stimuli.csv'
+      self.file_name = file_names[0] # the cusom noisy data to load
+
+      self.test_file_name = 'stimuli.csv'  # idealized exemplar data
       #f = Figure(figsize=(5,4), dpi=100)
       #a = f.add_subplot(111)
       self.combobox = gtk.combo_box_new_text()
@@ -584,7 +602,11 @@ class SOM:
 
       self.test_data = np.apply_along_axis(lambda x: x/np.linalg.norm(x),1,self.test_data) # data normalization
 
-      self.target = np.genfromtxt(self.file_name,delimiter=',',usecols=(9),dtype=str,skip_header=1) # loading the labels for use in the figure
+      # here specify the labels (for coloring them nicely on the figure)
+      self.target = np.genfromtxt(self.file_name,delimiter=',',usecols=(9),dtype=str,skip_header=1) # loading the labels for use in the figure (corresponding to data)
+
+      self.test_target = np.genfromtxt(self.test_file_name,delimiter=',',usecols=(9),dtype=str,skip_header=1) # corresponding to test_data
+
       self.combobox.set_active(1)
       self.combobox.connect('changed', self.Reset)
       #cols = self.columns[self.combobox.get_active()]
