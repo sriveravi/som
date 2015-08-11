@@ -578,7 +578,10 @@ class SOM:
       self.combobox.append_text('Visual only')
       self.combobox.append_text('Visual and acoustic')
       self.test_data = np.genfromtxt(self.test_file_name, delimiter=',',usecols=(self.visual_and_acoustic),skip_header=1)
-      self.test_data += 0.00001
+      self.test_data +=  -.5 #0.00001
+
+
+
       self.test_data = np.apply_along_axis(lambda x: x/np.linalg.norm(x),1,self.test_data) # data normalization
 
       self.target = np.genfromtxt(self.file_name,delimiter=',',usecols=(9),dtype=str,skip_header=1) # loading the labels for use in the figure
@@ -587,10 +590,12 @@ class SOM:
       #cols = self.columns[self.combobox.get_active()]
       #print cols
       self.data = np.genfromtxt(self.file_name, delimiter=',',usecols=(self.visual_and_acoustic),skip_header=1)
-      self.data += 0.00001
+      self.data += -.5  #0.00001
       self.data = np.apply_along_axis(lambda x: x/np.linalg.norm(x),1,self.data) # data normalization
 
       self.pattern_labels = np.genfromtxt(self.file_name, delimiter=',',usecols=(self.visual_and_acoustic), skip_footer=14, dtype=str)
+
+
       #print self.pattern_labels
       self.init_som()
       #self.toolbar = NavigationToolbar(self.canvas, self.window)
