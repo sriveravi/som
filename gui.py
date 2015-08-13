@@ -362,7 +362,7 @@ class SOM:
       print("Training...")
       #self.som.train_gliozzi(data) # Gliozzi et al training
 
-      self.som.train_random(data,300)
+      self.som.train_random(data,20)
 
 
       print("\n...ready!")
@@ -565,13 +565,16 @@ class SOM:
       #self.som.show()
       #self.pause.set_sensitive(self.som.paused)
       #self.vbox.pack_start(self.som, True, True, 0)
-      file_names = ['stimuli.csv']
+      #file_names =  #  ['stimuli.csv']
+
+      self.file_name =  '4749.csv' # 'stimuli.csv' # file_names[0]
+      self.test_file_name = '4749.csv' # 'stimuli.csv'
+
       self.visual_only = [0,1,2,3,4,5,6,7]
       self.visual_and_acoustic = [0,1,2,3,4,5,6,7,8]
       self.columns = [self.visual_only, self.visual_and_acoustic]
 
-      self.file_name = file_names[0]
-      self.test_file_name = 'stimuli.csv'
+      
       #f = Figure(figsize=(5,4), dpi=100)
       #a = f.add_subplot(111)
       self.combobox = gtk.combo_box_new_text()
