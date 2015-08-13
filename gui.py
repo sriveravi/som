@@ -567,8 +567,9 @@ class SOM:
       #self.vbox.pack_start(self.som, True, True, 0)
       #file_names =  #  ['stimuli.csv']
 
-      self.file_name =  '4749.csv' # 'stimuli.csv' # file_names[0]
-      self.test_file_name = '4749.csv' # 'stimuli.csv'
+      allFileName = '4749.csv' #'stimuli.csv'	
+      self.file_name =  allFileName  #'4749.csv' # 'stimuli.csv' # file_names[0]
+      self.test_file_name = allFileName #'4749.csv' # 'stimuli.csv'
 
       self.visual_only = [0,1,2,3,4,5,6,7]
       self.visual_and_acoustic = [0,1,2,3,4,5,6,7,8]
@@ -596,7 +597,8 @@ class SOM:
       self.data += -.5  #0.00001
       self.data = np.apply_along_axis(lambda x: x/np.linalg.norm(x),1,self.data) # data normalization
 
-      self.pattern_labels = np.genfromtxt(self.file_name, delimiter=',',usecols=(self.visual_and_acoustic), skip_footer=14, dtype=str)
+      #self.pattern_labels = np.genfromtxt(self.file_name, delimiter=',',usecols=(self.visual_and_acoustic), skip_footer=14, dtype=str)
+      self.pattern_labels = np.genfromtxt(self.file_name, delimiter=',',usecols=(self.visual_and_acoustic), dtype=str)[0]
 
 
       #print self.pattern_labels
