@@ -567,7 +567,7 @@ class SOM:
       #self.vbox.pack_start(self.som, True, True, 0)
       #file_names =  #  ['stimuli.csv']
 
-      allFileName = '4749.csv' #'stimuli.csv'	
+      allFileName = '4750.csv' #'stimuli.csv'	
       self.file_name =  allFileName  #'4749.csv' # 'stimuli.csv' # file_names[0]
       self.test_file_name = allFileName #'4749.csv' # 'stimuli.csv'
 
