@@ -1,7 +1,7 @@
 from numpy import sqrt,sqrt,array,unravel_index,nditer,linalg,random,subtract,power,exp,pi,zeros,arange,outer,meshgrid,linspace,log,where, genfromtxt, argmin
 import numpy as np
 import random as r
-from pylab import plot,axis,show,pcolor,colorbar,bone
+from pylab import plot,axis,show,pcolor,colorbar,bone, xlabel, ylabel, legend
 from collections import defaultdict
 from warnings import warn
 import copy as cop
@@ -180,7 +180,7 @@ class SOM(object):
         
         if self.predMode == 'prot':
             # find distance to all prototypes  
-            print('Decision based on prototype')
+            # print('Decision based on prototype')
             for prot,label in self.getProt():                       
                 #protMapped = self.som.weights[self.som.winner(prot) ]
                 protDist.append( linalg.norm( bmuW- prot )) # self.ideal[ idx ])) 
@@ -197,7 +197,7 @@ class SOM(object):
                 
         # decide based on the value of 'side' feature        
         elif  self.predMode == 'side':      
-            print( 'Decision based on side feature')
+            # print( 'Decision based on side feature')
             # find distance to all prototypes (for just the side feature)                   
             for prot,label in self.getProt(idealProt = True ):                       
                 protDist.append( linalg.norm( bmuW[-2:]- prot[-2:] )) # self.ideal[ idx ])) 
@@ -264,12 +264,8 @@ class SOM(object):
             childList = childList[ childList != 'N']
             
             # store in the big list
-            print somList
-            print fullSomList
-            print childList
-            # HERE, axis out of bound error!!!
-            fullSomList = np.concatenate( (fullSomList, somList), axis=1)
-            fullChildList = np.concatenate( (fullChildList, childList), axis=1)
+            fullSomList = np.concatenate( (fullSomList, somList), axis=0)
+            fullChildList = np.concatenate( (fullChildList, childList), axis=0)
         
         # get how well model does
         if len(fullChildList) >0:
@@ -378,29 +374,15 @@ def slideAcc( acc, window=6 ):
     for i1 in range(window,N+1):      
         a = acc[i1-window:i1]
         #print i1, a
-        wAcc[i1-1] = nanmean(a) # get mean over window    
+        wAcc[i1-1] = np.nanmean(a) # get mean over window    
     return wAcc
-
 
 def binToOrthog( data ):
     # take a binary data matrix and convert to orthogonal representation    
     N,d = data.shape # N,d : num samples, num features
     dataOut = np.ones((N, 2*d))*np.nan  
-    
     dataOut[:,::2] = data
     dataOut[:,1::2] = 1-data    
-    '''        
-    for subIdx,x in enumerate(data):
-        for fIdx, xi in enumerate(x):
-            # get the f1,f2 features 
-            if xi== 0:
-                f1= 1
-                f2= 0
-            else:
-                f1 =0
-                f2 =1
-            dataOut[subIdx,2*fIdx:2*fIdx+2] = f1,f2
-    '''
     return dataOut
 
 
@@ -608,8 +590,6 @@ class MiniSom:
 	    #self.weights[it.multi_index][i] = data[:,i]
             ##self.weights[it.multi_index] = self.weights[it.multi_index]/linalg.norm(self.weights[it.multi_index])
             #it.iternext()
-	""" Initializes the weights of the SOM picking random samples from data """
-
 
         it = nditer(self.activation_map, flags=['multi_index'])
         scale = 0.3
