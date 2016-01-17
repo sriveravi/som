@@ -1,4 +1,4 @@
-Antenna,Mouth,Back,Hand,Feet,Tail,Body,Color,Label,category,accuracy,isLabeled
+Antenna,Mouth,Back,Hand,Feet,Tail,Body,Side,Label,category,accuracy,isLabeled
 1,1,1,1,1,0,1,1,1,A,1.0,False
 1,1,1,1,1,0,1,1,1,A,1.0,False
 1,1,1,0,1,1,1,1,1,A,1.0,False
