@@ -7,6 +7,7 @@ from warnings import warn
 import copy as cop
 #import time
 import sys
+
 """
     Minimalistic implementation of the Self Organizing Maps (SOM).
 
@@ -287,18 +288,16 @@ class SOM(object):
             May need to include a variance normalization in future. """
         A =  self.ideal[ self.idealTarget=='A']
         B =  self.ideal[ self.idealTarget=='B']
-        projA = numpy.empty(A.shape) * numpy.nan
-        projB = numpy.empty(B.shape) * numpy.nan
+        projA = np.empty(A.shape) * np.nan
+        projB = np.empty(B.shape) * np.nan
         # go through all catA
         for idx,x in enumerate(A):
-            projA[idx] = mod.som.weights[mod.som.winner(x)]
+            projA[idx] = self.som.weights[self.som.winner(x)]
         for idx,x in enumerate(B):
-            projB[idx] = mod.som.weights[mod.som.winner(x)]
+            projB[idx] = self.som.weights[self.som.winner(x)]
         diff = linalg.norm(projA.mean(axis=0)-projB.mean(axis=0) ) 
-        
         # pooled variance estimate (not standard, since using average variance across dimensions for a class)
         pVar = pVar = (projA.var(axis=0).mean() + projB.var(axis=0).mean() )/2  
-        
         return diff/np.sqrt( pVar)
     
     def getProt( self, idealProt = False ):
@@ -536,7 +535,7 @@ class MiniSom:
         #eta = max(0.1, min(1, coeff_a*exp(coeff_b*sqrt(q))))
 
 	# display x, q 	
-	print "x = ", x, "qerr = ", q
+        print "x = ", x, "qerr = ", q
 	
 	
 	#From MIOsom_seqtrainBISPESATOESP1RETTOT.m
@@ -544,20 +543,15 @@ class MiniSom:
 	#val_y2=1;
 	#coeff_b= (log(val_y2) - log(val_y1))/ (val_x2 - val_x1);
 	#coeff_a = val_y1 * exp(-coeff_b * val_x1);
-  
 	#lrate = 1/(1 + exp(-((sqrt(qerr)-val_05)/steepness)));
-	r =   12
-	val_05 = 0.1 + r * 0.05
-	steepness = 0.1 + r * 0.05
-	
-	
-	eta =  1 / (1 + exp(-((sqrt(q)-val_05)/steepness)));
-	
-	print "lrate = ", eta
+        r =   12
+        val_05 = 0.1 + r * 0.05
+        steepness = 0.1 + r * 0.05
+        eta =  1 / (1 + exp(-((sqrt(q)-val_05)/steepness)));
+        print "lrate = ", eta
 
         #sig = self.sigma
         #g = self.neighborhood(win,self.sigma_gliozzi[t])*eta # improves the performances
-
 
         g = self.neighborhood(win,self.sigma_gliozzi[t])*eta # improves the performances
         it = nditer(g, flags=['multi_index'])
@@ -594,11 +588,11 @@ class MiniSom:
         it = nditer(self.activation_map, flags=['multi_index'])
         scale = 0.3
         while not it.finished:
-	    #for i in range(8):
-	    for i in range(self.input_len):
-	      col = data[:, i]
-	      self.weights[it.multi_index][i] = self.random_generator.uniform(min(col), max(col)) * scale
-	     
+            #for i in range(8):
+            for i in range(self.input_len):
+                col = data[:, i]
+                self.weights[it.multi_index][i] = self.random_generator.uniform(min(col), max(col)) * scale
+                 
             it.iternext()
 
     def random_weights_init(self,data):
@@ -637,25 +631,24 @@ class MiniSom:
 
             
     def train_gliozzi(self,data,num_iteration=1):    
-      	self.running = True
+        self.running = True
 
         """ Trains the SOM picking samples at random from data """
-	data_indices = range(len(data))
-	self.sigma_gliozzi = linspace(1.2, 0.8, num=len(data))
-
-	self._init_T(len(data))      
+        data_indices = range(len(data))
+        self.sigma_gliozzi = linspace(1.2, 0.8, num=len(data))
+        self._init_T(len(data))      
 
         #while iteration < num_iteration:
 
-	random.shuffle(data_indices)
-	for iteration, d in enumerate(data_indices):
-          self.update_gliozzi(data[d],self.winner(data[d]),iteration)
+        random.shuffle(data_indices)
+        for iteration, d in enumerate(data_indices):
+            self.update_gliozzi(data[d],self.winner(data[d]),iteration)
           
         self.running = False
 
 
     def train_batch(self,data,num_iteration):
-	self.running = True
+        self.running = True
         """ Trains using all the vectors in data sequentially """
         self._init_T(len(data)*num_iteration)
         iteration = 0
