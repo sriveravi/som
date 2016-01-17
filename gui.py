@@ -1,4 +1,5 @@
 #! /usr/bin/som python
+# mostly taken from Olivia Guest
 
 import pygtk
 pygtk.require('2.0')
