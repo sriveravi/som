@@ -4,6 +4,7 @@ import random as r
 from pylab import plot,axis,show,pcolor,colorbar,bone
 from collections import defaultdict
 from warnings import warn
+import copy as cop
 #import time
 import sys
 """
@@ -179,7 +180,7 @@ class SOM(object):
         
         if self.predMode == 'prot':
             # find distance to all prototypes  
-            print('Decision based on prot')
+            print('Decision based on prototype')
             for prot,label in self.getProt():                       
                 #protMapped = self.som.weights[self.som.winner(prot) ]
                 protDist.append( linalg.norm( bmuW- prot )) # self.ideal[ idx ])) 
@@ -263,6 +264,10 @@ class SOM(object):
             childList = childList[ childList != 'N']
             
             # store in the big list
+            print somList
+            print fullSomList
+            print childList
+            # HERE, axis out of bound error!!!
             fullSomList = np.concatenate( (fullSomList, somList), axis=1)
             fullChildList = np.concatenate( (fullChildList, childList), axis=1)
         
