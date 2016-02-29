@@ -12,6 +12,6 @@ setup(
   include_package_data=True,
   license="CC BY 3.0",
   py_modules=['minisom'],
-  requires = ['numpy'],
+  requires = ['numpy']
 #  ext_modules = cythonize("minisom.pyx"),
 )

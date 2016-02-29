@@ -326,14 +326,14 @@ class SOM(object):
         self.som.weights =scale*(np.random.random_sample( self.som.weights.shape)-.5)
 
 
-    def showLearnCuves(self, window=6):
+    def showLearnCurves(self, window=6):
         curveSOM = slideAcc( self.somAcc, window )
         curveSubj = slideAcc( self.acc, window )
         plot( np.arange(len(curveSOM)) ,curveSOM, 'k.-', linewidth=3, label='SOM')
-        plot( np.arange(len(curveSubj)), curveSubj, 'g--', linewidth=3, label='prt')
+        plot( np.arange(len(curveSubj)), curveSubj, 'g--', linewidth=3, label='Person')
         plot( np.arange(0,50), np.ones(50)*.5,'r-', linewidth=2, label='chance')
         xlabel('trial')
-        legend()
+        legend(loc=4)
         self.curveSOM = curveSOM
         self.curveSubj = curveSubj
         
